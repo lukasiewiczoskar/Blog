@@ -200,24 +200,6 @@
 
 	addClickListenersToTags();
 
-	const calculateAuthorsParams = function (authors) {
-		const params = { max: 0, min: 999999 };
-		for (let author in authors) {
-			params.max = Math.max(authors[author], params.max);
-			params.min = Math.min(authors[author], params.min);
-		}
-		console.log("max  A" + params.max + "  min  A" + params.min);
-		return params;
-	};
-
-	const calculateAutorClass = function (count, params) {
-		const normalizedCount = count - params.min;
-		const normalizedMax = params.max - params.min;
-		const percentage = normalizedCount / normalizedMax;
-		const classNumber = Math.floor(percentage * (opts.cloudClassCount - 1) + 1);
-		return opts.cloudClassPrefix + classNumber; //gdzie znajduje się wstwienie tego w cllasList ?
-	};
-
 	const generateAuthors = function () {
 		let allAuthors = {};
 
@@ -274,33 +256,51 @@
 
 		const clickedElement = this;
 
+		/* make a new constant "href" and read the attribute "href" of the clicked element */
 		const href = clickedElement.getAttribute("href");
 
-		const author = href.replace("#author-", " ");
-
-		const activeAuthorsLinks = document.querySelectorAll(
+		/* make a new constant "author" and extract author from the "href" constant */
+		const author = href.replace("#author-", "");
+		console.log("autor : " + author);
+		/* find all autor links with class active */
+		const autorLinksActive = document.querySelectorAll(
 			'a.active[href^="#author-"]'
 		);
-
-		for (activeAuthorsLink of activeAuthorsLinks) {
-			activeAuthorsLink.classList.remove("active");
+		console.log("autor links active : " + autorLinksActive);
+		/* START LOOP: for each active author link */
+		for (let authorLinkActive of autorLinksActive) {
+			/* remove class active */
+			authorLinkActive.classList.remove("active");
 		}
-		const authorLinks = document.querySelectorAll(
+
+		/* find all author links with "href" attribute equal to the "href" constant */
+		const autorLinks = document.querySelectorAll(
 			'a.active[href^="#author-]' + href + '"'
 		);
+		console.log("autor links: " + autorLinks);
+		/* START LOOP: for each found author link */
+		for (let authorLink of autorLinks) {
+			/* add class active */
+			authorLink.classList.add("active");
 
-		for (let authorlink of authorLinks) {
-			authorlink.classList.add("active");
+			/* END LOOP: for each found author link */
 		}
 
+		/* execute function "generateTitleLinks" with article selector as argument */
 		generateTitleLinks('[data-author="' + author + '"]');
+		console.log("funkcja :", generateTitleLinks);
 	};
 
 	const addClickListenersToAuthors = function () {
-		const authorLinks = document.querySelectorAll('a[href^="#author-"]');
+		/* find all links to authors */
 
+		const authorLinks = document.querySelectorAll(".post-author a");
+
+		/* START LOOP: for each link */
 		for (let authorLink of authorLinks) {
+			/* add authorClickHandler as event listener for that link */
 			authorLink.addEventListener("click", authorClickHandler);
+			/* END LOOP: for each link */
 		}
 	};
 	addClickListenersToAuthors();
