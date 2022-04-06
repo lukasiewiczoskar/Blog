@@ -184,8 +184,6 @@
 	addClickListenersToTags()
 
 	const generateAuthors = function () {
-		let allAuthors = {}
-
 		const articles = document.querySelectorAll(optArticleSelector)
 
 		for (let article of articles) {
@@ -200,21 +198,6 @@
 			html = html + linkHtml
 
 			findAuthors.innerHTML = html
-
-			/* [NEW] find list of tags in right column */
-			const tagAuthors = document.querySelector('.list .authors')
-
-			/* [NEW] create variable for all links HTML code */
-			let allAuthorsHTML = ''
-
-			/* [NEW] START LOOP: for each tag in allTags: */
-			for (let author in allAuthors) {
-				/* [NEW] generate code of a link and add it to allTagsHTML */
-				allAuthorsHTML += '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'
-				/* [NEW] END LOOP: for each tag in allTags: */
-			}
-			/*[NEW] add HTML from allTagsHTML to tagList */
-			tagAuthors.innerHTML = allAuthorsHTML
 		}
 	}
 
