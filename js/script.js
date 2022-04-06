@@ -32,8 +32,8 @@
 		optArticleTagsSelector = '.post-tags .list',
 		optArticleAuthorSelector = '.post-author',
 		optTagsListSelector = '.tags.list',
-        optCloudClassCount = 5,
-        optCloudClassPrefix = 'tag-size-'
+		optCloudClassCount = 5,
+		optCloudClassPrefix = 'tag-size-'
 
 	const generateTitleLinks = function (customSelector = '') {
 		/* remove contents of titleList */
@@ -66,25 +66,25 @@
 	}
 	generateTitleLinks()
 
-    const calculateTagsParams = function(tags){
-        const params = {max: 0, min: 999999}
-        for (let tag in tags){
-            if (tags[tag] > params.max){
-            params.max = tags[tag];
-            } else if (tags[tag] < params.min){
-                params.min = tags[tag]
-            }
-        }
-        return params;
-    }
-    const calculateTagClass = function(count, params){
-        const normalizedCount = count - params.min;
-        const normalizedMax = params.max - params.min;
-        const percentage = normalizedCount / normalizedMax;
-        const classNumber = Math.floor( percentage * (optCloudClassCount - 1) + 1);
-        return optCloudClassPrefix + classNumber;
-    }
-    
+	const calculateTagsParams = function (tags) {
+		const params = { max: 0, min: 999999 }
+		for (let tag in tags) {
+			if (tags[tag] > params.max) {
+				params.max = tags[tag]
+			} else if (tags[tag] < params.min) {
+				params.min = tags[tag]
+			}
+		}
+		return params
+	}
+	const calculateTagClass = function (count, params) {
+		const normalizedCount = count - params.min
+		const normalizedMax = params.max - params.min
+		const percentage = normalizedCount / normalizedMax
+		const classNumber = Math.floor(percentage * (optCloudClassCount - 1) + 1)
+		return optCloudClassPrefix + classNumber
+	}
+
 	const generateTags = function () {
 		/* [NEW] create a new variable allTags with an empty object */
 		let allTags = {}
@@ -125,22 +125,22 @@
 
 		/* [NEW] create variable for all links HTML code */
 		const tagsParams = calculateTagsParams(allTags)
-        let allTagsHTML = ''
+		let allTagsHTML = ''
 
 		/* [NEW] START LOOP: for each tag in allTags: */
 		for (let tag in allTags) {
 			/* [NEW] generate code of a link and add it to allTagsHTML */
-			allTagsHTML += tag + ' (' + allTags[tag] + ') '
-            const tagLinkHTML = '<li>' + calculateTagClass(allTags[tag], tagsParams) + '</li>';
-            console.log('tagLinkHTML:', tagLinkHTML);
-		/* [NEW] END LOOP: for each tag in allTags: */
-        }
+			allTagsHTML += '<li><a href="#tag-' + tag + '">' + tag + ' (' + allTags[tag] + ') ' + '</a></li>'
+			const tagLinkHTML = '<li>' + calculateTagClass(allTags[tag], tagsParams) + '</li>'
+			console.log('tagLinkHTML:', tagLinkHTML)
+			/* [NEW] END LOOP: for each tag in allTags: */
+		}
 		/*[NEW] add HTML from allTagsHTML to tagList */
 		tagList.innerHTML = allTagsHTML
 	}
 
 	generateTags()
-    
+
 	function tagClickHandler(event) {
 		/*[DONE] prevent default action for this event */
 		event.preventDefault()
@@ -184,6 +184,8 @@
 	addClickListenersToTags()
 
 	const generateAuthors = function () {
+		let allAuthors = {}
+
 		const articles = document.querySelectorAll(optArticleSelector)
 
 		for (let article of articles) {
@@ -198,6 +200,21 @@
 			html = html + linkHtml
 
 			findAuthors.innerHTML = html
+
+			/* [NEW] find list of tags in right column */
+			const tagAuthors = document.querySelector('.list .authors')
+
+			/* [NEW] create variable for all links HTML code */
+			let allAuthorsHTML = ''
+
+			/* [NEW] START LOOP: for each tag in allTags: */
+			for (let author in allAuthors) {
+				/* [NEW] generate code of a link and add it to allTagsHTML */
+				allAuthorsHTML += '<li><a href="#author-' + author + '">' + author + ' (' + allAuthors[author] + ')</a></li>'
+				/* [NEW] END LOOP: for each tag in allTags: */
+			}
+			/*[NEW] add HTML from allTagsHTML to tagList */
+			tagAuthors.innerHTML = allAuthorsHTML
 		}
 	}
 
@@ -210,7 +227,7 @@
 
 		const href = clickedElement.getAttribute('href')
 
-		const author = href.replace('#author-', '')
+		const author = href.replace('#author-', ' ')
 
 		const activeAuthorsLinks = document.querySelectorAll('a.active[href^="#author-"]')
 
